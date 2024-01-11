@@ -7,6 +7,8 @@ import { IdentityConfigService } from './identity-config.service';
 import { IdentityService } from '../services/identity.service';
 import { OidcAuthService } from '../services/oidc-auth.service';
 import { SigninCallbackComponent } from '../signin-callback/signin-callback.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { OidcAuthInterceptor } from './oidc-auth.interceptor';
 
 export function initializeApp(identityConfigService: IdentityConfigService): () => Promise<void> {
   return () => {
@@ -21,7 +23,7 @@ export function initializeApp(identityConfigService: IdentityConfigService): () 
     SigninCallbackComponent
   ],
   imports: [
-    CommonModule
+    CommonModule, HttpClientModule
   ],
   providers:[
     { provide: AuthService, useClass: AuthZeroService },
@@ -33,7 +35,12 @@ export function initializeApp(identityConfigService: IdentityConfigService): () 
       deps: [IdentityConfigService],
       multi: true
     },
-    OidcAuthService
+    OidcAuthService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: OidcAuthInterceptor,
+      multi: true
+    }
   ]
 })
 export class IdentityModule { }

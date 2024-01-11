@@ -30,10 +30,10 @@ export class IdentityConfigService {
     const authZeroSettings: IdentityClientSettings = {
       customDomain: 'https://dev.geotab.auth0app.com',
       myAdminAppClientId: 'klYw7yW2QApN1adqafPpUyjt3X0teOhs',
-      scope: 'openid profile email',
+      scope: 'openid profile email http://localhost:5000',
       cacheLocation: 'localStorage',
       useRefreshTokens: false,
-      audience: 'sample',
+      audience: 'http://localhost:5000',
       clientRoot: 'http://localhost:4200/'
     }
 
