@@ -18,7 +18,7 @@ export class OidcAuthInterceptor implements HttpInterceptor {
     if(!this.isUrlWhitelisted(request.url))
         return next.handle(request);
 
-    return from(this.oidcAuthService.getAccessToken()).pipe(
+    return this.oidcAuthService.getAccessToken().pipe(
       switchMap((accessToken) => {
           if(accessToken){
             const authRequest = request.clone({
@@ -28,8 +28,7 @@ export class OidcAuthInterceptor implements HttpInterceptor {
           }
           return next.handle(request);
         })
-  );
-
+    );
   }
 
   isUrlWhitelisted(url: string){

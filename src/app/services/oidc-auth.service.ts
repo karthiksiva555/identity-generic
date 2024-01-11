@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { User, UserManager, UserManagerSettings } from 'oidc-client-ts';
-import { BehaviorSubject, Observable, filter, of, take } from 'rxjs';
+import { BehaviorSubject, Observable, filter, from, map, of, switchMap, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -53,10 +53,12 @@ export class OidcAuthService {
     );
   }
 
-  public getAccessToken(): Promise<string>{
-    return this.userManager.getUser().then((user: User | null) => {
-        return user ? user.access_token : '';
-    });
+  public getAccessToken(): Observable<string>{
+    return from(this.userManager.getUser()).pipe(
+        map((user: User | null) => {
+            return user && user.access_token ? user.access_token : '';
+        })
+    );
   }
 
   public getUser(): Promise<User|null> {
